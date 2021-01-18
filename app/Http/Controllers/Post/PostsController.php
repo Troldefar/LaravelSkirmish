@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostsController extends Controller
 {
@@ -15,7 +16,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return view('posts.index');
+        $posts = Post::paginate(10);
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -40,9 +42,7 @@ class PostsController extends Controller
             'body' => 'required'
         ]);
 
-        auth()->user()->posts()->create([
-            'body' => $request->body
-        ]);
+        auth()->user()->posts()->create($request->only('body'));
 
         return back();
     }
