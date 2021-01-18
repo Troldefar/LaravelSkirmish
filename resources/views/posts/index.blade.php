@@ -26,7 +26,7 @@
             @if ($posts->count() > 0)
                 @foreach($posts as $post)
                     <div class="mb-4">
-                        <a href="" class="font-bold">
+                        <a href="{{ route('users.posts', $post->user) }}" class="font-bold">
                             {{ $post->user->name }}
                         </a>
                         <span class="text-gray text-sm">
