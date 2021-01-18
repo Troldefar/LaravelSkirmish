@@ -16,7 +16,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
+        // Eager load releationships
+        $posts = Post::with(['user', 'likes'])->paginate(5);
         return view('posts.index', compact('posts'));
     }
 
