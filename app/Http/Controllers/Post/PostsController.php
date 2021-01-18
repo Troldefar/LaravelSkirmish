@@ -90,9 +90,8 @@ class PostsController extends Controller
      */
     public function destroy(Post $post, Request $request)
     {
-        if($this->ownedBy($request->user_id)) {
-            $post->delete();
-            return back();
-        }
+        $this->authorize('delete', $post);
+        $post->delete();
+        return back();
     }
 }

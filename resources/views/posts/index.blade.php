@@ -35,7 +35,7 @@
                         <p class="mb-2">
                             {{ $post->body }}
                         </p>
-                        @if($post->ownedBy(auth()->user()))
+                        @can('delete', $post)
                             <form action="{{ route('post.delete', $post) }}" method="post">
                                 @csrf
                                 @method('DELETE')
@@ -43,7 +43,7 @@
                                     Delete
                                 </button>
                             </form>
-                        @endif
+                        @endcan
                         <div class="flex items-center">
                             @auth
                                 @if(!$post->likeOnce(auth()->user()))
