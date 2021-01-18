@@ -27,6 +27,7 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/posts', [PostsController::class, 'index'])->name('posts');
 Route::post('/posts', [PostsController::class, 'store']);
 Route::delete('/posts/{post}', [PostsController::class, 'destroy'])->name('post.delete');
+Route::get('/posts/{post}', [PostsController::class, 'show'])->name('post.show');
 
 Route::post('/posts/{post}/likes', [PostLikeController::class, 'store'])->name('posts.like');
 Route::delete('/posts/{post}/likes', [PostLikeController::class, 'destroy'])->name('posts.like');
