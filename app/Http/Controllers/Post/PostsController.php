@@ -17,7 +17,7 @@ class PostsController extends Controller
     public function index()
     {
         // Eager load releationships
-        $posts = Post::with(['user', 'likes'])->paginate(5);
+        $posts = Post::latest()->with(['user', 'likes'])->paginate(5);
         return view('posts.index', compact('posts'));
     }
 
@@ -90,6 +90,9 @@ class PostsController extends Controller
      */
     public function destroy(Post $post, Request $request)
     {
-        auth()->user()-posts()->destroy($post);
+        if($this->ownedBy($request->user_id)) {
+            $post->delete();
+            return back();
+        }
     }
 }

@@ -35,6 +35,15 @@
                         <p class="mb-2">
                             {{ $post->body }}
                         </p>
+                        @if($post->ownedBy(auth()->user()))
+                            <form action="{{ route('post.delete', $post) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-blue-500">
+                                    Delete
+                                </button>
+                            </form>
+                        @endif
                         <div class="flex items-center">
                             @auth
                                 @if(!$post->likeOnce(auth()->user()))
