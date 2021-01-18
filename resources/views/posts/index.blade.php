@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex justify-center">
+    <div class="flex justify-center mb-10">
         <div class="w-8/12 bg-white p-6 rounded-lg">
             <form action="{{ route('posts') }}" method="post" class="mb-4">
                 @csrf
@@ -35,6 +35,28 @@
                         <p class="mb-2">
                             {{ $post->body }}
                         </p>
+                        <div class="flex items-center">
+                            @if(!$post->likeOnce(auth()->user()))
+                            <form action="{{ route('posts.like', $post) }}" method="post" class="mr-1">
+                                @csrf
+                                <button type="submit" class="text-blue-500">
+                                    Like
+                                </button>
+                            </form>
+                            @else
+                            <form action="{{ route('posts.like', $post) }}" method="post" class="mr-1">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-blue-500">
+                                    Dislike
+                                </button>
+                            </form>
+                            @endif
+                            <span>
+                                {{ $post->likes->count() }}
+                                {{ Str::plural('like', $post->likes->count()) }}
+                            </span>
+                        </div>
                     </div>
                 @endforeach
                 {{ $posts->links() }}

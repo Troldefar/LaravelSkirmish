@@ -1,13 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Post;
+namespace App\Http\Controllers\Like;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
 
-class PostsController extends Controller
+class PostLikeController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(['auth']); 
+    }
 
     /**
      * Display a listing of the resource.
@@ -16,8 +21,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
-        return view('posts.index', compact('posts'));
+        //
     }
 
     /**
@@ -36,13 +40,15 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Post $post, Request $request)
     {
-        $this->validate($request, [
-            'body' => 'required'
-        ]);
+        if($post->likeOnce($request->user())) {
+            return response('Already liked this post!', 409);
+        }
 
-        auth()->user()->posts()->create($request->only('body'));
+        $post->likes()->create([
+            'user_id' => $request->user()->id
+        ]);
 
         return back();
     }
@@ -89,6 +95,7 @@ class PostsController extends Controller
      */
     public function destroy(Post $post, Request $request)
     {
-        auth()->user()-posts()->destroy($post);
+        $request->user()->likes()->where('post_id', $post->id)->delete();
+        return back();
     }
 }
